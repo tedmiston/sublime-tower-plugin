@@ -1,0 +1,3 @@
+[
+  {"caption": "Open in Tower", "command": "tower_open_from_sidebar", "args": {"paths": []}}
+]
