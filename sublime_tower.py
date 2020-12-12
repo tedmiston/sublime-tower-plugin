@@ -119,7 +119,7 @@ class TowerOpenFromSidebarCommand(sublime_plugin.WindowCommand):
         return is_in_repo(current_dir)
 
 
-class TowerCreateNewRepoFromSidebarCommand(sublime_plugin.WindowCommand):
+class TowerCreateNewRepositoryFromSidebarCommand(sublime_plugin.WindowCommand):
     """
     If a single directory is given as argument, initialize Git repository
     with Tower.
