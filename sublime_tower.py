@@ -117,3 +117,27 @@ class TowerOpenFromSidebarCommand(sublime_plugin.WindowCommand):
             current_dir = given_path
 
         return is_in_repo(current_dir)
+
+
+class TowerCreateNewRepoFromSidebarCommand(sublime_plugin.WindowCommand):
+    """
+    If a single directory is given as argument, initialize Git repository
+    with Tower.
+    """
+
+    def run(self, dirs):
+        given_path = dirs[0]
+        open_in_tower(given_path)           
+
+    def is_visible(self, dirs):
+        if len(dirs) != 1:
+            return False
+
+        given_path = dirs[0]
+
+        if os.path.isfile(given_path):
+            current_dir = os.path.dirname(given_path)
+        else:
+            current_dir = given_path
+
+        return not is_in_repo(current_dir)
