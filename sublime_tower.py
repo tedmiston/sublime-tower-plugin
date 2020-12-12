@@ -32,9 +32,9 @@ def is_in_repo(path):
         output = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
                                          shell=True, universal_newlines=True,
                                          timeout=2)
+        return output.strip() == 'true'
     except subprocess.CalledProcessError as e:
-        pass
-    return output.strip() == 'true'
+        return False
 
 
 def get_repo_root(path):
@@ -103,3 +103,5 @@ class TowerOpenFromSidebarCommand(sublime_plugin.WindowCommand):
         if is_in_repo(current_dir):
             path = get_repo_root(current_dir)
             open_in_tower(path)
+        else:
+            open_in_tower(current_dir)
