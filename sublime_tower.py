@@ -85,11 +85,12 @@ class TowerOpenCommand(sublime_plugin.TextCommand):
             path = get_repo_root(current_dir)
             open_in_tower(path)
 
+
 class TowerOpenFromSidebarCommand(sublime_plugin.WindowCommand):
     """
     Open the repo of the given paths[] in Tower.
-    paths[] may contain multiple files/directories if the user selected them
-    from the Side Bar. Process only the first.
+    paths[] may contain multiple files/directories if the user selected multiple
+    elements from the Side Bar, hide the menu entry.
     """
 
     def run(self, paths):
@@ -103,5 +104,16 @@ class TowerOpenFromSidebarCommand(sublime_plugin.WindowCommand):
         if is_in_repo(current_dir):
             path = get_repo_root(current_dir)
             open_in_tower(path)
+
+    def is_visible(self, paths):
+        if len(paths) != 1:
+            return False
+
+        given_path = paths[0]
+
+        if os.path.isfile(given_path):
+            current_dir = os.path.dirname(given_path)
         else:
-            open_in_tower(current_dir)
+            current_dir = given_path
+
+        return is_in_repo(current_dir)
