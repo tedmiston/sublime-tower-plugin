@@ -85,6 +85,16 @@ class TowerOpenCommand(sublime_plugin.TextCommand):
             path = get_repo_root(current_dir)
             open_in_tower(path)
 
+    def is_visible(self):
+        current_file_path = self.view.file_name()
+        
+        if not current_file_path:
+            return False
+
+        current_dir = os.path.dirname(current_file_path)
+
+        return is_in_repo(current_dir)        
+
 
 class TowerOpenFromSidebarCommand(sublime_plugin.WindowCommand):
     """
