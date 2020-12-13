@@ -1,0 +1,5 @@
+[
+  { "caption": "-", "id": "repo_commands" },
+  {"caption": "Open in Tower", "command": "tower_open_from_sidebar", "args": {"paths": []}},
+  {"caption": "Create new Repository in Tower", "command": "tower_create_new_repository_from_sidebar", "args": {"dirs": []}}
+]

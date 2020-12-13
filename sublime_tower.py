@@ -32,9 +32,9 @@ def is_in_repo(path):
         output = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
                                          shell=True, universal_newlines=True,
                                          timeout=2)
+        return output.strip() == 'true'
     except subprocess.CalledProcessError as e:
-        pass
-    return output.strip() == 'true'
+        return False
 
 
 def get_repo_root(path):
@@ -84,3 +84,70 @@ class TowerOpenCommand(sublime_plugin.TextCommand):
         if is_in_repo(current_dir):
             path = get_repo_root(current_dir)
             open_in_tower(path)
+
+    def is_visible(self):
+        current_file_path = self.view.file_name()
+        
+        if not current_file_path:
+            return False
+
+        current_dir = os.path.dirname(current_file_path)
+
+        return is_in_repo(current_dir)        
+
+
+class TowerOpenFromSidebarCommand(sublime_plugin.WindowCommand):
+    """
+    Open the repo of the given paths[] in Tower.
+    paths[] may contain multiple files/directories if the user selected multiple
+    elements from the Side Bar, hide the menu entry.
+    """
+
+    def run(self, paths):
+        given_path = paths[0]
+        
+        if os.path.isfile(given_path):
+            current_dir = os.path.dirname(given_path)
+        else:
+            current_dir = given_path
+
+        if is_in_repo(current_dir):
+            path = get_repo_root(current_dir)
+            open_in_tower(path)
+
+    def is_visible(self, paths):
+        if len(paths) != 1:
+            return False
+
+        given_path = paths[0]
+
+        if os.path.isfile(given_path):
+            current_dir = os.path.dirname(given_path)
+        else:
+            current_dir = given_path
+
+        return is_in_repo(current_dir)
+
+
+class TowerCreateNewRepositoryFromSidebarCommand(sublime_plugin.WindowCommand):
+    """
+    If a single directory is given as argument, initialize Git repository
+    with Tower.
+    """
+
+    def run(self, dirs):
+        given_path = dirs[0]
+        open_in_tower(given_path)           
+
+    def is_visible(self, dirs):
+        if len(dirs) != 1:
+            return False
+
+        given_path = dirs[0]
+
+        if os.path.isfile(given_path):
+            current_dir = os.path.dirname(given_path)
+        else:
+            current_dir = given_path
+
+        return not is_in_repo(current_dir)
